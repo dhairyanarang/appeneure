@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Syne, DM_Sans } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
-import CustomCursor from "@/components/CustomCursor";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -39,7 +38,6 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-[#080808] text-[#F5F5F5] antialiased">
         <SmoothScrollProvider>
-          <CustomCursor />
           {children}
         </SmoothScrollProvider>
       </body>
