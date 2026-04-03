@@ -19,20 +19,21 @@ function ProcessStep({
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.7,
-        delay: index * 0.12,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      className="bg-[#080808] p-8 group hover:bg-[#0f0f0f] transition-colors duration-300"
+      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      className="bg-[#080808] p-10 group hover:bg-[#0a0a0a] transition-colors duration-300"
     >
-      <span className="text-[#6EE7B7] text-sm font-mono mb-6 block">
+      <span className="text-[#6EE7B7] text-xs font-mono tracking-widest mb-8 block">
         {step.number}
       </span>
-      <h3 className="text-[#F5F5F5] text-xl font-semibold mb-4 group-hover:text-[#6EE7B7] transition-colors duration-300">
+      <h3
+        className="text-[#F5F5F5] text-2xl font-bold mb-5 group-hover:text-[#6EE7B7] transition-colors duration-300 tracking-tight"
+        style={{ fontFamily: "var(--font-syne)" }}
+      >
         {step.title}
       </h3>
-      <p className="text-[#888888] text-sm leading-relaxed">{step.description}</p>
+      <p className="text-[#555] text-sm leading-[1.8]" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        {step.description}
+      </p>
     </motion.div>
   );
 }
@@ -42,15 +43,15 @@ export default function Process() {
   const titleInView = useInView(titleRef, { once: true, margin: "-80px" });
 
   return (
-    <section id="process" className="px-6 md:px-12 py-24 border-t border-white/5">
-      <div className="max-w-7xl mx-auto">
+    <section id="process" className="border-t border-white/5">
+      <div className="max-w-[1400px] mx-auto px-8 md:px-16 py-32">
         {/* Header */}
         <div ref={titleRef} className="mb-20">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={titleInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="text-[#888888] text-sm tracking-[0.2em] uppercase mb-4"
+            className="text-[#666] text-xs tracking-[0.25em] uppercase mb-5"
           >
             How We Work
           </motion.p>
@@ -58,7 +59,8 @@ export default function Process() {
             initial={{ opacity: 0, y: 30 }}
             animate={titleInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-5xl font-semibold text-[#F5F5F5] tracking-tight max-w-lg"
+            className="text-[clamp(2.5rem,5vw,4rem)] font-bold text-[#F5F5F5] tracking-[-0.03em] leading-[1]"
+            style={{ fontFamily: "var(--font-syne)" }}
           >
             Our process,
             <br />
@@ -66,8 +68,8 @@ export default function Process() {
           </motion.h2>
         </div>
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5">
+        {/* Steps grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.04] rounded-2xl overflow-hidden">
           {processSteps.map((step, i) => (
             <ProcessStep key={step.number} step={step} index={i} />
           ))}

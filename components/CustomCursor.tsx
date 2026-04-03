@@ -1,80 +1,63 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function CustomCursor() {
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-  const dotX = useMotionValue(-100);
-  const dotY = useMotionValue(-100);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
 
-  const springConfig = { damping: 25, stiffness: 200 };
-  const smoothX = useSpring(cursorX, springConfig);
-  const smoothY = useSpring(cursorY, springConfig);
+  const ringX = useSpring(mouseX, { damping: 28, stiffness: 180, mass: 0.4 });
+  const ringY = useSpring(mouseY, { damping: 28, stiffness: 180, mass: 0.4 });
 
-  const isHoveringRef = useRef(false);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const ringScale = useMotionValue(1);
+  const smoothScale = useSpring(ringScale, { damping: 20, stiffness: 200 });
 
   useEffect(() => {
-    const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      dotX.set(e.clientX);
-      dotY.set(e.clientY);
+    const move = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
 
-    const handleMouseEnter = () => {
-      isHoveringRef.current = true;
-      if (ringRef.current) {
-        ringRef.current.style.transform += " scale(1.8)";
-        ringRef.current.style.borderColor = "#6EE7B7";
-      }
-    };
+    const onEnter = () => ringScale.set(1.6);
+    const onLeave = () => ringScale.set(1);
 
-    const handleMouseLeave = () => {
-      isHoveringRef.current = false;
-      if (ringRef.current) {
-        ringRef.current.style.borderColor = "rgba(245,245,245,0.5)";
-      }
-    };
+    window.addEventListener("mousemove", move);
 
-    window.addEventListener("mousemove", moveCursor);
-
-    const interactives = document.querySelectorAll("a, button, [role='button']");
-    interactives.forEach((el) => {
-      el.addEventListener("mouseenter", handleMouseEnter);
-      el.addEventListener("mouseleave", handleMouseLeave);
+    // Use event delegation — no need to re-query elements
+    document.addEventListener("mouseover", (e) => {
+      const el = e.target as HTMLElement;
+      if (el.closest("a, button, [role='button']")) onEnter();
+    });
+    document.addEventListener("mouseout", (e) => {
+      const el = e.target as HTMLElement;
+      if (el.closest("a, button, [role='button']")) onLeave();
     });
 
     return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      interactives.forEach((el) => {
-        el.removeEventListener("mouseenter", handleMouseEnter);
-        el.removeEventListener("mouseleave", handleMouseLeave);
-      });
+      window.removeEventListener("mousemove", move);
     };
-  }, [cursorX, cursorY, dotX, dotY]);
+  }, [mouseX, mouseY, ringScale]);
 
   return (
     <>
-      {/* Outer ring - follows with spring */}
+      {/* Ring — lags slightly behind for elegance */}
       <motion.div
-        ref={ringRef}
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-white/50 pointer-events-none z-[9999] mix-blend-difference transition-colors duration-200"
+        className="fixed top-0 left-0 w-7 h-7 rounded-full border border-white/30 pointer-events-none z-[9999]"
         style={{
-          x: smoothX,
-          y: smoothY,
+          x: ringX,
+          y: ringY,
+          scale: smoothScale,
           translateX: "-50%",
           translateY: "-50%",
         }}
       />
-      {/* Inner dot - follows exactly */}
+      {/* Dot — instant */}
       <motion.div
         className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-[#6EE7B7] pointer-events-none z-[9999]"
         style={{
-          x: dotX,
-          y: dotY,
+          x: mouseX,
+          y: mouseY,
           translateX: "-50%",
           translateY: "-50%",
         }}
