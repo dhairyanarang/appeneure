@@ -2,74 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
+
+// Load WebGL particle field client-side only (no SSR)
+const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
 
 const words = ["Apps", "Products", "Experiences", "Platforms", "Solutions"];
-
-function AuroraBackground() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Orb 1 — large, slow drift top-left */}
-      <motion.div
-        className="absolute w-[700px] h-[700px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(110,231,183,0.12) 0%, transparent 70%)",
-          filter: "blur(40px)",
-          top: "-10%",
-          left: "-15%",
-        }}
-        animate={{
-          x: [0, 80, 20, 0],
-          y: [0, 60, -30, 0],
-        }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Orb 2 — medium, faster, top-right */}
-      <motion.div
-        className="absolute w-[500px] h-[500px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(129,140,248,0.08) 0%, transparent 70%)",
-          filter: "blur(60px)",
-          top: "5%",
-          right: "-10%",
-        }}
-        animate={{
-          x: [0, -60, -20, 0],
-          y: [0, 80, 30, 0],
-        }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-      />
-
-      {/* Orb 3 — bottom center */}
-      <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(110,231,183,0.07) 0%, transparent 70%)",
-          filter: "blur(80px)",
-          bottom: "-20%",
-          left: "30%",
-        }}
-        animate={{
-          x: [0, -40, 60, 0],
-          y: [0, -50, 20, 0],
-        }}
-        transition={{ duration: 26, repeat: Infinity, ease: "easeInOut", delay: 6 }}
-      />
-
-      {/* Subtle dot grid */}
-      <div
-        className="absolute inset-0 opacity-[0.025]"
-        style={{
-          backgroundImage: "radial-gradient(circle, #F5F5F5 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      {/* Vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,transparent_40%,#080808_100%)]" />
-    </div>
-  );
-}
 
 export default function Hero() {
   const [currentWord, setCurrentWord] = useState(0);
@@ -86,10 +24,15 @@ export default function Hero() {
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       id="home"
     >
-      <AuroraBackground />
+      {/* WebGL Particle Field */}
+      <ParticleField />
 
+      {/* Radial vignette so text stays readable */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,transparent_30%,#080808_100%)]" />
+
+      {/* Content */}
       <div className="relative z-10 text-center max-w-[900px] mx-auto px-8">
-        {/* Eyebrow tag */}
+        {/* Eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -97,7 +40,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 mb-10"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[#6EE7B7] animate-pulse" />
-          <span className="text-[#888888] text-xs tracking-[0.25em] uppercase font-medium">
+          <span className="text-[#666] text-xs tracking-[0.25em] uppercase font-medium">
             App Development Agency
           </span>
         </motion.div>
@@ -116,7 +59,6 @@ export default function Hero() {
             We Build
           </motion.span>
 
-          {/* Animated word */}
           <motion.span
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -153,7 +95,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.85 }}
-          className="text-[#666666] text-lg md:text-xl max-w-[480px] mx-auto mb-12 leading-[1.6]"
+          className="text-[#555] text-lg md:text-xl max-w-[480px] mx-auto mb-12 leading-[1.6]"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           From idea to App Store — we design and ship mobile & web
@@ -176,7 +118,7 @@ export default function Hero() {
           </a>
           <a
             href="#contact"
-            className="px-7 py-3.5 border border-white/10 text-[#888888] hover:text-[#F5F5F5] hover:border-white/20 rounded-full text-sm transition-all duration-300"
+            className="px-7 py-3.5 border border-white/10 text-[#888] hover:text-[#F5F5F5] hover:border-white/20 rounded-full text-sm transition-all duration-300"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             Start a Project →
@@ -189,15 +131,15 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.8 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10"
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="flex flex-col items-center gap-1"
         >
-          <span className="text-[#444] text-[10px] tracking-[0.3em] uppercase">Scroll</span>
-          <div className="w-px h-10 bg-gradient-to-b from-[#444] to-transparent" />
+          <span className="text-[#333] text-[10px] tracking-[0.3em] uppercase">Scroll</span>
+          <div className="w-px h-10 bg-gradient-to-b from-[#333] to-transparent" />
         </motion.div>
       </motion.div>
     </section>
