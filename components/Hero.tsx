@@ -2,144 +2,152 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import dynamic from "next/dynamic";
 
-// Load WebGL particle field client-side only (no SSR)
-const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
-
-const words = ["Apps", "Products", "Experiences", "Platforms", "Solutions"];
+const words = [
+  "success",
+  "solutions",
+  "results",
+  "growth",
+  "impact",
+  "excellence",
+  "potential",
+];
 
 export default function Hero() {
-  const [currentWord, setCurrentWord] = useState(0);
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentWord((prev) => (prev + 1) % words.length);
-    }, 2400);
-    return () => clearInterval(interval);
+    const id = setInterval(() => setCurrent((c) => (c + 1) % words.length), 2200);
+    return () => clearInterval(id);
   }, []);
 
   return (
     <section
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       id="home"
+      className="min-h-screen flex flex-col items-center justify-center text-center px-5 pt-16"
+      style={{ background: "var(--bg)" }}
     >
-      {/* WebGL Particle Field */}
-      <ParticleField />
-
-      {/* Radial vignette so text stays readable */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,transparent_30%,#080808_100%)]" />
-
-      {/* Content */}
-      <div className="relative z-10 text-center max-w-[900px] mx-auto px-8">
+      <div className="max-w-[900px] mx-auto">
         {/* Eyebrow */}
-        <motion.div
+        <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="inline-flex items-center gap-2 mb-10"
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-sm text-[var(--fg-muted)] mb-8 tracking-wide"
+          style={{ fontFamily: "var(--font-body)" }}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#6EE7B7] animate-pulse" />
-          <span className="text-[#666] text-xs tracking-[0.25em] uppercase font-medium">
-            App Development Agency
-          </span>
-        </motion.div>
+          App Development Studio
+        </motion.p>
 
-        {/* Headline */}
-        <h1
-          className="text-[clamp(3rem,8vw,7rem)] font-bold leading-[0.95] tracking-[-0.03em] mb-8"
-          style={{ fontFamily: "var(--font-syne)" }}
+        {/* h1 */}
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="text-[clamp(2.8rem,6vw,5rem)] font-medium text-[var(--fg)] mb-2 leading-[1]"
+          style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.05em" }}
         >
-          <motion.span
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="block text-[#F5F5F5]"
+          App Development Studio
+        </motion.h1>
+
+        {/* Subtitle + animated word */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center"
+        >
+          <p
+            className="text-[clamp(2.8rem,6vw,5rem)] font-medium text-[var(--fg-muted)] leading-[1] mb-0"
+            style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.05em" }}
           >
-            We Build
-          </motion.span>
+            Turning ideas into
+          </p>
 
-          <motion.span
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="block relative"
-            style={{ height: "1.05em", overflow: "hidden" }}
+          {/* Cycling word */}
+          <div
+            className="overflow-hidden"
+            style={{ height: "clamp(2.8rem,6vw,5rem)", lineHeight: 1 }}
           >
             <AnimatePresence mode="wait">
               <motion.span
-                key={currentWord}
-                initial={{ y: "110%", opacity: 0 }}
-                animate={{ y: "0%", opacity: 1 }}
-                exit={{ y: "-110%", opacity: 0 }}
-                transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                className="block text-[#6EE7B7]"
+                key={words[current]}
+                initial={{ y: "110%" }}
+                animate={{ y: "0%" }}
+                exit={{ y: "-110%" }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="block text-[clamp(2.8rem,6vw,5rem)] font-medium leading-[1]"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  letterSpacing: "-0.05em",
+                  color: "var(--accent)",
+                }}
               >
-                {words[currentWord]}
+                {words[current]}
               </motion.span>
             </AnimatePresence>
-          </motion.span>
-
-          <motion.span
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
-            className="block text-[#F5F5F5]"
-          >
-            That Matter
-          </motion.span>
-        </h1>
+          </div>
+        </motion.div>
 
         {/* Subtext */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.85 }}
-          className="text-[#555] text-lg md:text-xl max-w-[480px] mx-auto mb-12 leading-[1.6]"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+          transition={{ duration: 0.7, delay: 0.7 }}
+          className="text-base md:text-lg text-[var(--fg-muted)] max-w-[520px] mx-auto mt-10 mb-10 leading-relaxed"
+          style={{ fontFamily: "var(--font-body)", letterSpacing: "-0.01em" }}
         >
-          From idea to App Store — we design and ship mobile & web
-          apps that users love.
+          Transform ideas into powerful mobile and web apps that users love and
+          businesses depend on to grow.
         </motion.p>
 
         {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
+          transition={{ duration: 0.6, delay: 0.85 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-3"
         >
           <a
-            href="#work"
-            className="px-7 py-3.5 bg-[#6EE7B7] text-[#080808] font-semibold rounded-full text-sm hover:bg-[#5dd9a8] transition-all duration-200 hover:scale-105 active:scale-95"
-            style={{ fontFamily: "var(--font-syne)" }}
+            href="#services"
+            className="px-6 py-3 text-sm font-medium rounded-[3px] transition-all duration-200 hover:opacity-80"
+            style={{
+              background: "var(--fg)",
+              color: "var(--bg)",
+              fontFamily: "var(--font-body)",
+            }}
           >
-            See Our Work
+            Our services
           </a>
           <a
             href="#contact"
-            className="px-7 py-3.5 border border-white/10 text-[#888] hover:text-[#F5F5F5] hover:border-white/20 rounded-full text-sm transition-all duration-300"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+            className="px-6 py-3 text-sm font-medium rounded-[3px] border border-[var(--border)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--fg)] transition-all duration-200"
+            style={{ fontFamily: "var(--font-body)" }}
           >
-            Start a Project →
+            Get in touch
           </a>
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll hint */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.8 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10"
+        transition={{ delay: 1.6 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="flex flex-col items-center gap-1"
         >
-          <span className="text-[#333] text-[10px] tracking-[0.3em] uppercase">Scroll</span>
-          <div className="w-px h-10 bg-gradient-to-b from-[#333] to-transparent" />
+          <span
+            className="text-[10px] tracking-[0.3em] uppercase text-[var(--fg-muted)]"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            Scroll
+          </span>
+          <div className="w-px h-8 bg-gradient-to-b from-[var(--fg-muted)] to-transparent" />
         </motion.div>
       </motion.div>
     </section>

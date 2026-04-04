@@ -3,58 +3,134 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const navLinks = ["Work", "Process", "About"];
+const navLinks = [
+  { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Work", href: "#work" },
+  { label: "Process", href: "#process" },
+  { label: "Contact", href: "#contact" },
+];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <motion.header
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-[#080808]/90 backdrop-blur-xl" : ""
-      }`}
-    >
-      <div className="max-w-[1400px] mx-auto px-8 md:px-16 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <a
-          href="/"
-          className="font-display text-[#F5F5F5] font-semibold text-base tracking-tight"
-          style={{ fontFamily: "var(--font-syne)" }}
-        >
-          Appeneure
-        </a>
+    <>
+      <header
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        style={{
+          backgroundColor: "rgba(252,252,252,0.96)",
+          borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
+          backdropFilter: scrolled ? "blur(16px)" : "none",
+        }}
+      >
+        <div className="max-w-[1280px] mx-auto px-5 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <a
+            href="/"
+            className="text-base font-semibold text-[var(--fg)] tracking-tight"
+            style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.05em" }}
+          >
+            appeneure
+          </a>
 
-        {/* Nav links — centered */}
-        <nav className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
+          {/* Nav links — desktop */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sm text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors duration-200"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Right side */}
+          <div className="flex items-center gap-4">
+            <a
+              href="#contact"
+              className="hidden md:inline-flex items-center px-4 py-[9px] text-sm font-medium rounded-[3px] transition-colors duration-200 hover:opacity-85"
+              style={{
+                background: "var(--fg)",
+                color: "var(--bg)",
+                fontFamily: "var(--font-body)",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Get in touch
+            </a>
+
+            {/* Hamburger — mobile */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden flex flex-col gap-[5px] p-1"
+              aria-label="Toggle menu"
+            >
+              <span
+                className="block w-5 h-[1.5px] bg-[var(--fg)] transition-all duration-300 origin-center"
+                style={{
+                  transform: menuOpen ? "translateY(6.5px) rotate(45deg)" : "none",
+                }}
+              />
+              <span
+                className="block w-5 h-[1.5px] bg-[var(--fg)] transition-all duration-300"
+                style={{ opacity: menuOpen ? 0 : 1 }}
+              />
+              <span
+                className="block w-5 h-[1.5px] bg-[var(--fg)] transition-all duration-300 origin-center"
+                style={{
+                  transform: menuOpen ? "translateY(-6.5px) rotate(-45deg)" : "none",
+                }}
+              />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile off-canvas */}
+      <motion.div
+        initial={false}
+        animate={{ opacity: menuOpen ? 1 : 0, y: menuOpen ? 0 : -8 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="fixed top-16 left-0 right-0 z-40 md:hidden bg-[var(--bg)] border-b border-[var(--border)]"
+        style={{ pointerEvents: menuOpen ? "auto" : "none" }}
+      >
+        <div className="max-w-[1280px] mx-auto px-5 py-6 flex flex-col gap-1">
           {navLinks.map((link) => (
             <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
-              className="text-[#888888] hover:text-[#F5F5F5] text-sm transition-colors duration-300 relative group"
+              key={link.label}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className="py-3 text-base text-[var(--fg)] border-b border-[var(--border)] last:border-0"
+              style={{ fontFamily: "var(--font-body)" }}
             >
-              {link}
-              <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-[#6EE7B7] transition-all duration-300 group-hover:w-full" />
+              {link.label}
             </a>
           ))}
-        </nav>
-
-        {/* CTA */}
-        <a
-          href="#contact"
-          className="text-sm px-5 py-2 rounded-full bg-[#6EE7B7] text-[#080808] font-medium hover:bg-[#5dd9a8] transition-all duration-200 hover:scale-105"
-        >
-          Let&apos;s talk
-        </a>
-      </div>
-    </motion.header>
+          <a
+            href="#contact"
+            onClick={() => setMenuOpen(false)}
+            className="mt-4 flex items-center justify-center py-3 text-sm font-medium rounded-[3px]"
+            style={{
+              background: "var(--fg)",
+              color: "var(--bg)",
+              fontFamily: "var(--font-body)",
+            }}
+          >
+            Get in touch
+          </a>
+        </div>
+      </motion.div>
+    </>
   );
 }

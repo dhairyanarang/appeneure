@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans } from "next/font/google";
+import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
-const syne = Syne({
-  variable: "--font-syne",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const dmSans = DM_Sans({
@@ -16,30 +16,25 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Appeneure — App Development Agency",
-  description: "We build world-class mobile and web applications that drive growth and delight users.",
+  title: "Appeneure — App Development Studio",
+  description:
+    "We design and build mobile & web apps that users love and businesses depend on.",
   openGraph: {
-    title: "Appeneure — App Development Agency",
-    description: "We build world-class mobile and web applications that drive growth and delight users.",
+    title: "Appeneure — App Development Studio",
+    description: "Turning ideas into apps that drive results.",
+    url: "https://appeneure.com",
+    siteName: "Appeneure",
     type: "website",
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${syne.variable} ${dmSans.variable} h-full`}
-    >
-      <body className="min-h-full bg-[#080808] text-[#F5F5F5] antialiased">
-        <SmoothScrollProvider>
-          {children}
-        </SmoothScrollProvider>
+    <html lang="en" suppressHydrationWarning className={`${spaceGrotesk.variable} ${dmSans.variable}`}>
+      <body className="min-h-full antialiased">
+        <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>
     </html>
   );

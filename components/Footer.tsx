@@ -1,76 +1,136 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { footerNav } from "@/lib/data";
+
+const socials = [
+  { label: "LinkedIn", href: "#" },
+  { label: "Instagram", href: "#" },
+  { label: "X (Twitter)", href: "#" },
+  { label: "Behance", href: "#" },
+  { label: "Dribbble", href: "#" },
+];
 
 export default function Footer() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
-    <footer id="contact" className="border-t border-white/5">
-      {/* CTA */}
-      <div className="max-w-[1400px] mx-auto px-8 md:px-16 py-32 text-center" ref={ref}>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-[#666] text-xs tracking-[0.25em] uppercase mb-8"
-        >
-          Ready to Build?
-        </motion.p>
+    <footer style={{ background: "var(--bg-dark)", borderTop: "1px solid var(--border-dark)" }}>
+      {/* Top section */}
+      <div className="max-w-[1280px] mx-auto px-5 pt-16 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
+          {/* Brand col */}
+          <div className="lg:col-span-2 flex flex-col gap-6">
+            <a
+              href="/"
+              className="text-xl font-semibold"
+              style={{
+                color: "var(--fg-dark)",
+                fontFamily: "var(--font-display)",
+                letterSpacing: "-0.05em",
+              }}
+            >
+              appeneure
+            </a>
+            <p
+              className="text-sm leading-relaxed max-w-[280px]"
+              style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+            >
+              App Development Studio — building mobile and web products that
+              users love and businesses depend on.
+            </p>
+            {/* Social links */}
+            <div className="flex flex-wrap gap-4 mt-2">
+              {socials.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  className="text-xs transition-colors duration-200 hover:text-[var(--accent)]"
+                  style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+                >
+                  {s.label}
+                </a>
+              ))}
+            </div>
+          </div>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[clamp(3rem,8vw,7rem)] font-bold text-[#F5F5F5] tracking-[-0.03em] leading-[0.95] mb-12"
-          style={{ fontFamily: "var(--font-syne)" }}
-        >
-          Let&apos;s make
-          <br />
-          <span className="text-[#6EE7B7]">something great</span>
-        </motion.h2>
+          {/* Menu */}
+          <div className="flex flex-col gap-4">
+            <p
+              className="text-xs font-medium uppercase tracking-widest mb-1"
+              style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+            >
+              Menu
+            </p>
+            {footerNav.menu.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="text-sm transition-colors duration-200 hover:text-[var(--accent)]"
+                style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.35 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3"
-        >
-          <a
-            href="mailto:hello@appeneure.com"
-            className="px-7 py-3.5 bg-[#6EE7B7] text-[#080808] font-semibold rounded-full text-sm hover:bg-[#5dd9a8] transition-all duration-200 hover:scale-105 active:scale-95"
-            style={{ fontFamily: "var(--font-syne)" }}
-          >
-            hello@appeneure.com
-          </a>
-          <a
-            href="#"
-            className="px-7 py-3.5 border border-white/10 text-[#888] hover:text-[#F5F5F5] hover:border-white/20 rounded-full text-sm transition-all duration-300"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            Book a Call →
-          </a>
-        </motion.div>
+          {/* Services */}
+          <div className="flex flex-col gap-4">
+            <p
+              className="text-xs font-medium uppercase tracking-widest mb-1"
+              style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+            >
+              Services
+            </p>
+            {footerNav.services.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="text-sm transition-colors duration-200 hover:text-[var(--accent)]"
+                style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Legal */}
+          <div className="flex flex-col gap-4">
+            <p
+              className="text-xs font-medium uppercase tracking-widest mb-1"
+              style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+            >
+              Legal
+            </p>
+            {footerNav.legal.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="text-sm transition-colors duration-200 hover:text-[var(--accent)]"
+                style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/5 max-w-[1400px] mx-auto px-8 md:px-16 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <span className="text-[#444] text-xs" style={{ fontFamily: "var(--font-dm-sans)" }}>
-          © {new Date().getFullYear()} Appeneure. All rights reserved.
-        </span>
-        <div className="flex items-center gap-8">
-          {["Twitter", "LinkedIn", "Instagram"].map((social) => (
-            <a
-              key={social}
-              href="#"
-              className="text-[#444] hover:text-[#F5F5F5] text-xs transition-colors duration-200"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              {social}
-            </a>
-          ))}
+      <div
+        className="border-t"
+        style={{ borderColor: "var(--border-dark)" }}
+      >
+        <div className="max-w-[1280px] mx-auto px-5 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span
+            className="text-xs"
+            style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+          >
+            © {new Date().getFullYear()} Appeneure. All rights reserved.
+          </span>
+          <span
+            className="text-xs"
+            style={{ color: "var(--fg-dark-muted)", fontFamily: "var(--font-body)" }}
+          >
+            Built with ♡ in India
+          </span>
         </div>
       </div>
     </footer>

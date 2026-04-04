@@ -12,123 +12,153 @@ function ProjectCard({
   index: number;
 }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <motion.div
+    <motion.article
       ref={ref}
-      initial={{ opacity: 0, y: 60 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.8,
-        delay: index * 0.1,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      className="group relative overflow-hidden rounded-xl bg-[#0f0f0f] border border-white/5 hover:border-white/10 transition-all duration-500 cursor-pointer"
+      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      className="group cursor-pointer"
     >
-      {/* Image placeholder / colored block */}
+      {/* Image area */}
       <div
-        className="relative w-full aspect-[16/9] overflow-hidden"
-        style={{ background: `${project.color}10` }}
+        className="relative w-full aspect-[4/3] rounded-[6px] overflow-hidden mb-5"
+        style={{ background: project.bg }}
       >
-        <div
-          className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500"
-          style={{
-            background: `radial-gradient(circle at 30% 50%, ${project.color}, transparent 70%)`,
-          }}
-        />
-        {/* Placeholder label */}
+        {/* Placeholder number */}
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className="text-6xl font-bold opacity-10"
-            style={{ color: project.color }}
+            className="text-[8rem] font-medium leading-none select-none"
+            style={{
+              color: "rgba(0,0,0,0.06)",
+              fontFamily: "var(--font-display)",
+              letterSpacing: "-0.05em",
+            }}
           >
             {String(index + 1).padStart(2, "0")}
           </span>
         </div>
 
-        {/* Hover overlay */}
-        <div className="absolute inset-0 bg-[#080808]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-center justify-center">
-          <span className="text-[#F5F5F5] text-sm tracking-widest uppercase border border-white/20 px-6 py-3 rounded-full">
-            View Project →
-          </span>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-3">
-          <div>
-            <p className="text-[#888888] text-xs tracking-widest uppercase mb-1">
-              {project.category} · {project.year}
-            </p>
-            <h3 className="text-[#F5F5F5] text-xl font-semibold tracking-tight" style={{ fontFamily: "var(--font-syne)" }}>
-              {project.title}
-            </h3>
-          </div>
+        {/* Metric badge — top left */}
+        <div className="absolute top-4 left-4">
           <span
-            className="text-xs font-medium px-3 py-1 rounded-full mt-1"
+            className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-[3px]"
             style={{
-              color: project.color,
-              background: `${project.color}15`,
+              background: "var(--fg)",
+              color: "var(--bg)",
+              fontFamily: "var(--font-body)",
             }}
           >
             {project.result}
           </span>
         </div>
-        <p className="text-[#888888] text-sm leading-relaxed">
-          {project.description}
-        </p>
+
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/8 transition-all duration-300 flex items-center justify-center">
+          <span
+            className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xs font-medium px-4 py-2 rounded-[3px] bg-white/90 text-black"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            View project →
+          </span>
+        </div>
       </div>
-    </motion.div>
+
+      {/* Meta */}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3
+            className="text-xl font-medium text-[var(--fg)] mb-1 leading-tight"
+            style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.04em" }}
+          >
+            {project.title}
+          </h3>
+          <p
+            className="text-sm text-[var(--fg-muted)]"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            {project.tagline}
+          </p>
+        </div>
+        <div className="flex flex-col items-end gap-1 shrink-0 mt-0.5">
+          <span
+            className="text-xs text-[var(--fg-muted)] border border-[var(--border)] px-2 py-1 rounded-[3px]"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            {project.category}
+          </span>
+        </div>
+      </div>
+
+      {/* Services tags */}
+      <div className="flex gap-2 mt-3 flex-wrap">
+        {project.services.map((s) => (
+          <span
+            key={s}
+            className="text-[11px] text-[var(--fg-muted)]"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            {s}
+            {s !== project.services[project.services.length - 1] && (
+              <span className="ml-2 text-[var(--border)]">•</span>
+            )}
+          </span>
+        ))}
+      </div>
+    </motion.article>
   );
 }
 
 export default function Projects() {
-  const titleRef = useRef(null);
-  const titleInView = useInView(titleRef, { once: true, margin: "-80px" });
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="work" className="border-t border-white/5">
-      <div className="max-w-[1400px] mx-auto px-8 md:px-16 py-32">
-        {/* Section header */}
-        <div ref={titleRef} className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+    <section id="work" style={{ borderTop: "1px solid var(--border)" }}>
+      <div className="max-w-[1280px] mx-auto px-5 py-24 md:py-32">
+        {/* Header */}
+        <div
+          ref={ref}
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16"
+        >
           <div>
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={titleInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-              className="text-[#666] text-xs tracking-[0.25em] uppercase mb-5"
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+              className="text-sm text-[var(--fg-muted)] mb-4"
+              style={{ fontFamily: "var(--font-body)" }}
             >
-              Selected Work
+              Selected work
             </motion.p>
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={titleInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-[clamp(2.5rem,5vw,4rem)] font-bold text-[#F5F5F5] tracking-[-0.03em] leading-[1]"
-              style={{ fontFamily: "var(--font-syne)" }}
+              initial={{ opacity: 0, y: 24 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-[clamp(2rem,4vw,3.5rem)] font-medium text-[var(--fg)]"
+              style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.05em" }}
             >
-              Projects that
-              <br />
-              <span className="text-[#6EE7B7]">move the needle</span>
+              Featured projects
             </motion.h2>
           </div>
           <motion.a
             initial={{ opacity: 0 }}
-            animate={titleInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.3 }}
             href="#contact"
-            className="text-sm text-[#666] hover:text-[#F5F5F5] transition-colors duration-300 shrink-0"
+            className="text-sm text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors duration-200 shrink-0"
+            style={{ fontFamily: "var(--font-body)" }}
           >
-            All projects →
+            See all projects →
           </motion.a>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
+        {/* Grid — 2 cols */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-14">
+          {projects.map((p, i) => (
+            <ProjectCard key={p.id} project={p} index={i} />
           ))}
         </div>
       </div>

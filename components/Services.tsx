@@ -2,13 +2,13 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { processSteps } from "@/lib/data";
+import { services } from "@/lib/data";
 
-function ProcessStep({
-  step,
+function ServiceCard({
+  service,
   index,
 }: {
-  step: (typeof processSteps)[0];
+  service: (typeof services)[0];
   index: number;
 }) {
   const ref = useRef(null);
@@ -20,54 +20,74 @@ function ProcessStep({
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="flex flex-col gap-6 p-8"
-      style={{ background: "var(--bg)" }}
+      className="flex flex-col p-8 gap-8"
+      style={{ background: "var(--bg-alt)" }}
     >
-      {/* Number + duration */}
-      <div className="flex items-center justify-between">
-        <span
-          className="text-xs font-medium"
-          style={{ color: "var(--accent)", fontFamily: "var(--font-body)" }}
-        >
-          {step.number}
-        </span>
-        <span
-          className="text-xs px-2.5 py-1 rounded-[500px] border"
-          style={{
-            color: "var(--fg-muted)",
-            borderColor: "var(--border)",
-            fontFamily: "var(--font-body)",
-          }}
-        >
-          {step.duration}
-        </span>
-      </div>
+      {/* Number */}
+      <span
+        className="text-xs font-medium text-[var(--fg-muted)]"
+        style={{ fontFamily: "var(--font-body)" }}
+      >
+        0{service.id}
+      </span>
 
       {/* Title */}
       <h3
-        className="text-xl font-medium text-[var(--fg)]"
+        className="text-2xl font-medium text-[var(--fg)]"
         style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.04em" }}
       >
-        {step.title}
+        {service.title}
       </h3>
+
+      {/* Items */}
+      <ul className="flex flex-col gap-2.5">
+        {service.items.map((item) => (
+          <li
+            key={item}
+            className="flex items-center gap-2.5 text-sm text-[var(--fg-muted)]"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            <span
+              className="w-[5px] h-[5px] rounded-full shrink-0"
+              style={{ background: "var(--accent)" }}
+            />
+            {item}
+          </li>
+        ))}
+      </ul>
 
       {/* Description */}
       <p
-        className="text-sm text-[var(--fg-muted)] leading-relaxed"
+        className="text-sm text-[var(--fg-muted)] leading-relaxed flex-1"
         style={{ fontFamily: "var(--font-body)" }}
       >
-        {step.description}
+        {service.description}
       </p>
+
+      {/* CTA */}
+      <a
+        href={service.href}
+        className="inline-flex items-center gap-1 text-sm font-medium text-[var(--fg)] hover:gap-2 transition-all duration-200"
+        style={{ fontFamily: "var(--font-body)" }}
+      >
+        {service.cta} <span>→</span>
+      </a>
     </motion.div>
   );
 }
 
-export default function Process() {
+export default function Services() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="process" style={{ borderTop: "1px solid var(--border)" }}>
+    <section
+      id="services"
+      style={{
+        borderTop: "1px solid var(--border)",
+        background: "var(--bg-alt)",
+      }}
+    >
       <div className="max-w-[1280px] mx-auto px-5 py-24 md:py-32">
         {/* Header */}
         <div ref={ref} className="mb-16">
@@ -78,7 +98,7 @@ export default function Process() {
             className="text-sm text-[var(--fg-muted)] mb-4"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            How we work
+            What we do
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 24 }}
@@ -87,17 +107,17 @@ export default function Process() {
             className="text-[clamp(2rem,4vw,3.5rem)] font-medium text-[var(--fg)]"
             style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.05em" }}
           >
-            How we work
+            Our solutions
           </motion.h2>
         </div>
 
-        {/* Steps — 4 columns with gap-px border trick */}
+        {/* 3 cards side by side */}
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px"
+          className="grid grid-cols-1 md:grid-cols-3 gap-px"
           style={{ background: "var(--border)" }}
         >
-          {processSteps.map((step, i) => (
-            <ProcessStep key={step.number} step={step} index={i} />
+          {services.map((s, i) => (
+            <ServiceCard key={s.id} service={s} index={i} />
           ))}
         </div>
       </div>
